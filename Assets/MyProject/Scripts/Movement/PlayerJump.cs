@@ -28,7 +28,6 @@ public class PlayerJump
             if (jumpPressed)
             {
                 _gravity.SetYVelocity(Mathf.Sqrt(_settings.jumpHeight * -2f * _settings.gravity));
-                Debug.Log("JumpPressed");
             }
         }
     }

@@ -2,23 +2,17 @@ using UnityEngine;
 
 public class SingleShotWeapon : BaseWeapon
 {
-    private bool _wasFiringLastFrame;
-    private float _fireTimer;
-    public SingleShotWeapon(WeaponSettings settings, Camera camera)
-        : base(settings, camera) { }
+    public SingleShotWeapon(WeaponSettings settings, Camera camera, Inventory inventory)
+        : base(settings, camera, inventory) { }
 
-    public override void UpdateWeapon(bool isFiringHeld)
+    public override void UpdateWeapon(bool isHeld, bool justPressed)
     {
-        // Стреляем ТОЛЬКО при нажатии (переход от false -> true)
-        if (isFiringHeld && !_wasFiringLastFrame && _fireTimer <= 0)
+        if (!justPressed) return;
+
+        if (Time.time >= _nextFireTime)
         {
-            FireRay();
-            _fireTimer = _settings.fireRate;
+            TryShoot();
+            _nextFireTime = Time.time + 1f / _settings.fireRate;
         }
-        if (_fireTimer >= 0 )
-        {
-            _fireTimer -= Time.deltaTime;
-        }
-        _wasFiringLastFrame = isFiringHeld;
     }
 }

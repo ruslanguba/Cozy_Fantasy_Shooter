@@ -2,19 +2,17 @@ using UnityEngine;
 
 public class ContinuousWeapon : BaseWeapon
 {
-    private float _nextDamageTime;
+    public ContinuousWeapon(WeaponSettings settings, Camera camera, Inventory inventory)
+        : base(settings, camera, inventory) { }
 
-    public ContinuousWeapon(WeaponSettings settings, Camera camera)
-        : base(settings, camera) { }
-
-    public override void UpdateWeapon(bool isFiringHeld)
+    public override void UpdateWeapon(bool isHeld, bool justPressed)
     {
-        if (!isFiringHeld) return;
+        if (!isHeld) return;
 
-        if (Time.time >= _nextDamageTime)
+        if (Time.time >= _nextFireTime)
         {
-            FireRay();
-            _nextDamageTime = Time.time + _settings.continuousDamageInterval;
+            TryShoot();
+            _nextFireTime = Time.time + 1f / _settings.fireRate;
         }
     }
 }
