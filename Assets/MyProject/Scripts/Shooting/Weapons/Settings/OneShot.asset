@@ -26,6 +26,7 @@ MonoBehaviour:
   aimFOV: 30
   aimSensitivityMultiplier: 0.5
   aimTransitionSpeed: 8
-  muzzleFlashPrefab: {fileID: 2164200323595930501, guid: 49128f58cfe7f4f4ab7d8c61dc9fe99d, type: 3}
-  impactEffectPrefab: {fileID: 687615900706840859, guid: b0bf22970c74cf94eb8823bf2f081f09, type: 3}
+  muzzleFlashPrefab: {fileID: 7696234885439548148, guid: 3ab165bec7bcb7c4cbfdc05ae8960525, type: 3}
+  impactEffectPrefab: {fileID: 4214422492716741318, guid: faa30a71d567ee34184eec006f3cac6d, type: 3}
   muzzlePivot: {fileID: 0}
+  icon: {fileID: 21300000, guid: 41ef5f77f0bbd254485e1516f00a6aff, type: 3}

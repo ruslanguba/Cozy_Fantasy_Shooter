@@ -12,6 +12,7 @@ public class WeaponManager : MonoBehaviour
     [SerializeField] private List<WeaponSettings> weaponSettingsList;
     [SerializeField] private Inventory inventory;
     private readonly List<BaseWeapon> _weapons = new();
+    private readonly List<GameObject> _weaponsGO = new();
     private int _currentWeaponIndex;
     private BaseWeapon _currentWeapon;
     private WeaponSettings _currentSettings;

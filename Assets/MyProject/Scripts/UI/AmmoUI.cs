@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AmmoUI : MonoBehaviour
 {
@@ -7,6 +8,7 @@ public class AmmoUI : MonoBehaviour
     [SerializeField] private Inventory inventory;
     [SerializeField] private TextMeshProUGUI totalAmmoText;
     [SerializeField] private TextMeshProUGUI magazineText;
+    [SerializeField] private Image _weaponIcon;
 
     private BaseWeapon _currentWeapon;
 
@@ -40,6 +42,7 @@ public class AmmoUI : MonoBehaviour
         _currentWeapon.AmmoInMagazineñChanged += UpdateMagazine;
         UpdateMagazine(_currentWeapon.GetCurrentAmmo);
         UpdateTotalAmmo(_currentWeapon.Settings.ammoType, inventory.GetAmmo(_currentWeapon.Settings.ammoType));
+        UpdateIcon();
     }
 
     private void UnsubscribeFromWeapon(BaseWeapon weapon)
@@ -68,5 +71,10 @@ public class AmmoUI : MonoBehaviour
     {
         UnsubscribeFromWeapon(_currentWeapon);
         SubscribeToWeapon(newWeapon);
+    }
+
+    public void UpdateIcon()
+    {
+        _weaponIcon.sprite = _currentWeapon.Settings?.icon;
     }
 }

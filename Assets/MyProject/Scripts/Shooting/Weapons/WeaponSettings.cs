@@ -25,4 +25,7 @@ public class WeaponSettings : ScriptableObject
     public GameObject muzzleFlashPrefab;
     public GameObject impactEffectPrefab;
     public Transform muzzlePivot;
+
+    [Header("UI")]
+    public Sprite icon;
 }

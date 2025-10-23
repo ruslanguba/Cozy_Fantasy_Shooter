@@ -21,7 +21,7 @@ public abstract class BaseWeapon
         _camera = camera;
         _inventory = inventory;
         _currentAmmoInMagazine = settings.magazineSize;
-        _vfx = new WeaponVFX(settings.muzzleFlashPrefab, settings.impactEffectPrefab, settings.muzzlePivot);
+        _vfx = new WeaponVFX(settings.muzzleFlashPrefab, settings.impactEffectPrefab, settings.muzzlePivot, camera);
     }
     protected bool TryShoot()
     {
