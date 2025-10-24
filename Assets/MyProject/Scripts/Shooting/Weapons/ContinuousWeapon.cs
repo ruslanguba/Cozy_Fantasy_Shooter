@@ -7,7 +7,11 @@ public class ContinuousWeapon : BaseWeapon
 
     public override void UpdateWeapon(bool isHeld, bool justPressed)
     {
-        if (!isHeld) return;
+        if (!isHeld)
+        {
+            StopShooting?.Invoke();
+            return;
+        }
 
         if (Time.time >= _nextFireTime)
         {

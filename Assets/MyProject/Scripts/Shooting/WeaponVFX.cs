@@ -30,7 +30,6 @@ public class WeaponVFX
         if (_muzzleParticles.Count == 0 || _camera == null)
             return;
 
-        // —троим луч из центра камеры (в направлении курсора)
         Ray ray = _camera.ViewportPointToRay(new Vector3(0.5f, 0.5f));
         Vector3 targetPoint;
 
@@ -48,6 +47,13 @@ public class WeaponVFX
             ps.Play();
         }
     }
+    public void StopMuzzleFlash()
+    {
+        foreach (var ps in _muzzleParticles)
+        {
+            ps.Stop();
+        }
+    }
 
     public void PlayImpact(Vector3 position, Vector3 normal)
     {
@@ -55,6 +61,14 @@ public class WeaponVFX
         {
             ps.transform.SetPositionAndRotation(position, Quaternion.LookRotation(normal));
             ps.Play();
+        }
+    }
+
+    public void StopImpact()
+    {
+        foreach (var ps in _impactParticles)
+        {
+            ps.Stop();
         }
     }
 }

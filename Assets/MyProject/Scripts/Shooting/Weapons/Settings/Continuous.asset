@@ -12,17 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e35d3304df364de498da7244c97188b1, type: 3}
   m_Name: Continuous
   m_EditorClassIdentifier: 
+  weaponPrefab: {fileID: 1536713838154312799, guid: 012b7bf3fad383945994c9864fe7145b, type: 3}
   weaponName: Lazer
-  ammoType: Lazzer
+  ammoType: ice
   magazineSize: 100
   fireRate: 5
   reloadTime: 1.5
   damage: 5
   range: 100
-  continuousDamageInterval: 0.2
   isContinuous: 1
   canAim: 1
   normalFOV: 60
   aimFOV: 40
   aimSensitivityMultiplier: 0.5
   aimTransitionSpeed: 8
+  muzzleFlashPrefab: {fileID: 3356864292062475226, guid: b803943418dc67747873b444e90cf4cb, type: 3}
+  impactEffectPrefab: {fileID: 8554122529346784088, guid: cbd9e43a61ba197448702d31dae23e58, type: 3}
+  icon: {fileID: 21300000, guid: 6f6cbbf17880bed4cb30a06aa15e2b6b, type: 3}

@@ -5,10 +5,13 @@ using UnityEngine;
 public abstract class BaseWeapon
 {
     public Action<int> AmmoInMagazineñChanged;
+    public Action Shoot;
+    public Action StopShooting;
+    public Action<Vector3, Vector3> Hit;
     protected readonly WeaponSettings _settings;
     protected readonly Camera _camera;
     protected readonly Inventory _inventory;
-    protected WeaponVFX _vfx;
+    //protected WeaponVFX _vfx;
     protected float _nextFireTime;
     protected int _currentAmmoInMagazine;
     protected bool _isReloading;
@@ -21,7 +24,7 @@ public abstract class BaseWeapon
         _camera = camera;
         _inventory = inventory;
         _currentAmmoInMagazine = settings.magazineSize;
-        _vfx = new WeaponVFX(settings.muzzleFlashPrefab, settings.impactEffectPrefab, settings.muzzlePivot, camera);
+        //_vfx = new WeaponVFX(settings.muzzleFlashPrefab, settings.impactEffectPrefab, settings.muzzlePivot, camera);
     }
     protected bool TryShoot()
     {
@@ -34,8 +37,8 @@ public abstract class BaseWeapon
 
         _currentAmmoInMagazine--;
         AmmoInMagazineñChanged?.Invoke(_currentAmmoInMagazine);
-        _vfx.PlayMuzzleFlash(_settings.muzzlePivot);
-        Debug.Log(_settings.muzzlePivot.position);
+        Shoot?.Invoke();
+        //_vfx.PlayMuzzleFlash(_settings.muzzlePivot);
         FireRay();
         return true;
     }
@@ -49,7 +52,7 @@ public abstract class BaseWeapon
         if (availableAmmo <= 0) return;
 
         int reloadAmount = Mathf.Min(neededAmmo, availableAmmo);
-        _inventory.CanUseAmmo(_settings.ammoType, reloadAmount);
+        _inventory.TryUseAmmo(_settings.ammoType, reloadAmount);
 
         _isReloading = true;
         _reloadTimer = _settings.reloadTime;
@@ -71,7 +74,7 @@ public abstract class BaseWeapon
         }
     }
     public abstract void UpdateWeapon(bool isHeld, bool justPressed);
-    public virtual void SetAiming(bool isAiming) { }
+    public virtual void SetAiming(bool isAiming) { } // â áóäóùåì äëÿ äîáàâëåíèÿ îòäà÷è
     protected void FireRay()
     {
         Ray ray = new Ray(_camera.transform.position, _camera.transform.forward);
@@ -80,9 +83,8 @@ public abstract class BaseWeapon
         {
             if (hit.collider.TryGetComponent(out IDamageable target))
                 target.TakeDamage(_settings.damage);
-
-            _vfx?.PlayImpact(hit.point, hit.normal);
-            Debug.Log(hit.point);
+            Hit?.Invoke(hit.point, hit.normal);
+            //_vfx?.PlayImpact(hit.point, hit.normal);
         }
     }
 }

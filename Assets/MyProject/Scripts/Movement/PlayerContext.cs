@@ -6,6 +6,7 @@ public class PlayerContext : MonoBehaviour
     [SerializeField] private PlayerSettings _settings;
     [SerializeField] private InputReader _inputReader;
     [SerializeField] private Transform _cameraPivot;
+    [SerializeField] private AIMManager _aimManager;
 
     private CharacterController _controller;
     private PlayerMovement _movement;
@@ -21,6 +22,9 @@ public class PlayerContext : MonoBehaviour
         _gravity = new PlayerGravity(_settings, _controller);
         _jump = new PlayerJump(_settings, _controller, _gravity, _inputReader);
         _look = new PlayerLook(_settings, _cameraPivot, transform, _inputReader);
+
+        if(_aimManager == null) _aimManager = GetComponent<AIMManager>();
+            _aimManager.IsAiming += OnSpeedChanged;
     }
 
     private void Update()
@@ -30,5 +34,11 @@ public class PlayerContext : MonoBehaviour
         _gravity.UpdateGravity();
         _jump.HandleJump();
         _movement.ApplyMovement(_gravity.VerticalVelocity);
+    }
+
+    private void OnSpeedChanged(bool isAiming)
+    {
+        // Меняем скорость движения при прицеливании
+        _movement.SetSpeedMultiplier(isAiming ? 0.5f : 1f); // например, половина скорости
     }
 }

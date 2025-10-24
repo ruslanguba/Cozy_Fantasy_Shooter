@@ -1,9 +1,31 @@
+using System;
 using UnityEngine;
 
-public class Damagable : MonoBehaviour, IDamageable
+public abstract class Damagable : MonoBehaviour, IDamageable
 {
-    public void TakeDamage(float damage)
+    public event Action<float> HitReceived;
+    [SerializeField] protected float _hitPoints = 100f;
+    [SerializeField] protected bool _destroyOnDeath = true;
+
+    public virtual void TakeDamage(float damage)
     {
-        Debug.Log(damage);
+        if (_hitPoints <= 0)
+            return;
+
+        _hitPoints -= damage;
+        HitReceived?.Invoke(_hitPoints);
+
+        if (_hitPoints <= 0)
+            Die();
+        else
+            OnHit();
+    }
+
+    protected virtual void OnHit() { }
+
+    protected virtual void Die()
+    {
+        if (_destroyOnDeath)
+            Destroy(gameObject);
     }
 }

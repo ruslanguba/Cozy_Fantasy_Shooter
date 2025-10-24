@@ -5,8 +5,14 @@ using UnityEngine;
 public class Inventory : MonoBehaviour
 {
     public Action<string, int> OnAmmoChanged;
+    public Action<WeaponSettings> WeaponCollected;
     private readonly Dictionary<string, int> _ammoStorage = new();
     private int _grenadeCount;
+
+    public void AddWeapon(WeaponSettings settings)
+    {
+        WeaponCollected?.Invoke(settings);
+    }
 
     public void AddAmmo(string itemID, int amount)
     {
@@ -18,7 +24,7 @@ public class Inventory : MonoBehaviour
         Debug.Log($"Added {amount} {itemID} ammo. Now: {_ammoStorage[itemID]}");
     }
 
-    public bool CanUseAmmo(string itemID, int amount)
+    public bool TryUseAmmo(string itemID, int amount)
     {
         if (!_ammoStorage.TryGetValue(itemID, out int current) || current < amount)
             return false;
@@ -39,7 +45,7 @@ public class Inventory : MonoBehaviour
         Debug.Log($"Added {amount} grenades. Now: {_grenadeCount}");
     }
 
-    public bool CanUseGrenade()
+    public bool TryUseGrenade()
     {
         if (_grenadeCount <= 0)
             return false;

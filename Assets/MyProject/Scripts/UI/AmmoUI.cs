@@ -4,31 +4,38 @@ using UnityEngine.UI;
 
 public class AmmoUI : MonoBehaviour
 {
-    [SerializeField] private WeaponManager weaponManager;
-    [SerializeField] private Inventory inventory;
+    [SerializeField] private WeaponManager _weaponManager;
+    [SerializeField] private Inventory _inventory;
     [SerializeField] private TextMeshProUGUI totalAmmoText;
     [SerializeField] private TextMeshProUGUI magazineText;
-    [SerializeField] private Image _weaponIcon;
+    [SerializeField] private Image _currentWeaponIcon;
+    [SerializeField] private Image _secondWeaponIcon;
 
     private BaseWeapon _currentWeapon;
-
-    private void OnEnable()
+    private bool _isWeaponIconActive = false;
+    public void Initialize(WeaponManager weaponManager, Inventory inventory)
     {
-        inventory.OnAmmoChanged += UpdateTotalAmmo;
-        weaponManager.WeaponChanged += SubscribeToWeapon;
+        _weaponManager = weaponManager;
+        _inventory = inventory;
+        _inventory.OnAmmoChanged += UpdateTotalAmmo;
+        _weaponManager.WeaponChanged += OnWeaponSwitched;
+        _inventory.WeaponCollected += OnWeaponCollected;
+        if (_weaponManager.CurrentWeapon != null)
+            SubscribeToWeapon(_weaponManager.CurrentWeapon);
+        if (_currentWeaponIcon.color.a != 0)
+        {
+            Color color = _currentWeaponIcon.color;
+            color.a = 0;
+            _currentWeaponIcon.color = color;
+        }
     }
 
     private void OnDisable()
     {
-        inventory.OnAmmoChanged -= UpdateTotalAmmo;
-        weaponManager.WeaponChanged -= SubscribeToWeapon;
+        _inventory.OnAmmoChanged -= UpdateTotalAmmo;
+        _inventory.WeaponCollected -= OnWeaponCollected;
+        _weaponManager.WeaponChanged -= OnWeaponSwitched;
         UnsubscribeFromWeapon(_currentWeapon);
-    }
-
-    private void Start()
-    {
-        if (weaponManager.CurrentWeapon != null)
-            SubscribeToWeapon(weaponManager.CurrentWeapon);
     }
 
     private void SubscribeToWeapon(BaseWeapon weapon)
@@ -41,8 +48,8 @@ public class AmmoUI : MonoBehaviour
         _currentWeapon = weapon;
         _currentWeapon.AmmoInMagazineñChanged += UpdateMagazine;
         UpdateMagazine(_currentWeapon.GetCurrentAmmo);
-        UpdateTotalAmmo(_currentWeapon.Settings.ammoType, inventory.GetAmmo(_currentWeapon.Settings.ammoType));
-        UpdateIcon();
+        UpdateTotalAmmo(_currentWeapon.Settings.ammoType, _inventory.GetAmmo(_currentWeapon.Settings.ammoType));
+        //UpdateIcon();
     }
 
     private void UnsubscribeFromWeapon(BaseWeapon weapon)
@@ -63,18 +70,53 @@ public class AmmoUI : MonoBehaviour
 
     private void UpdateTotalAmmo(string itemId, int total)
     {
-        totalAmmoText.text = total.ToString();
+        if (_currentWeapon != null && itemId == _currentWeapon.Settings.ammoType)
+        {
+            totalAmmoText.text = total.ToString();
+        }
     }
 
-    // Âûçûâàòü ïðè ñìåíå îðóæèÿ
     public void OnWeaponSwitched(BaseWeapon newWeapon)
     {
         UnsubscribeFromWeapon(_currentWeapon);
         SubscribeToWeapon(newWeapon);
+        UpdateIcon();
     }
 
     public void UpdateIcon()
     {
-        _weaponIcon.sprite = _currentWeapon.Settings?.icon;
+        if(_currentWeaponIcon.color.a == 0)
+        {
+            Color color = _currentWeaponIcon.color;
+            color.a = 1;
+            _currentWeaponIcon.color = color;
+
+        }
+        if (_isWeaponIconActive) SwitchIcon();
+    }
+
+    private void OnWeaponCollected(WeaponSettings newWeapon)
+    {
+        if (!_isWeaponIconActive)
+        {
+            _currentWeaponIcon.sprite = _currentWeapon.Settings?.icon;
+            _isWeaponIconActive = true;
+        }
+        else
+        {
+            _secondWeaponIcon.sprite = newWeapon.icon;
+            if (_secondWeaponIcon.color.a == 0)
+            {
+                Color color = _currentWeaponIcon.color;
+                color.a = 1;
+                _secondWeaponIcon.color = color;
+            }
+        }
+    }
+    private void SwitchIcon()
+    {
+        Sprite sprite = _currentWeaponIcon.sprite;
+        _currentWeaponIcon.sprite = _secondWeaponIcon.sprite;
+        _secondWeaponIcon.sprite = sprite;
     }
 }

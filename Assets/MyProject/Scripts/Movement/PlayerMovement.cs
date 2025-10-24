@@ -9,6 +9,7 @@ public class PlayerMovement
 
     private Vector3 _horizontalVelocity;
     private float _currentSpeed;
+    private float _speedMultiplier = 1;
 
     public Vector3 HorizontalVelocity => _horizontalVelocity;
 
@@ -34,7 +35,7 @@ public class PlayerMovement
         forward.Normalize();
         right.Normalize();
 
-        _horizontalVelocity = (forward * moveInput.y + right * moveInput.x).normalized * _currentSpeed;
+        _horizontalVelocity = (forward * moveInput.y + right * moveInput.x).normalized * _currentSpeed * _speedMultiplier;
         if(!_controller.isGrounded)
         {
             _horizontalVelocity = (forward * moveInput.y + right * moveInput.x).normalized * _currentSpeed/_settings.airSpeedMultiplier;
@@ -44,5 +45,10 @@ public class PlayerMovement
     public void ApplyMovement(Vector3 verticalVelocity)
     {
         _controller.Move((_horizontalVelocity + verticalVelocity) * Time.deltaTime);
+    }
+
+    public void SetSpeedMultiplier(float multiplier)
+    {
+        _speedMultiplier = multiplier;
     }
 }

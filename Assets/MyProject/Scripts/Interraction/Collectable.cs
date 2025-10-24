@@ -14,6 +14,6 @@ public class Collectable : MonoBehaviour, IInterractable
     {
         inventory.AddAmmo(_itemID, _ammount);
         Debug.Log($"collected: {_itemID} , ammount: {_ammount}");
-        Destroy( this );
+        Destroy(gameObject);
     }
 }
