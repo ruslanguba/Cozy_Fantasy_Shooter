@@ -14,7 +14,7 @@ namespace UnityStandardAssets.ImageEffects
 		public bool  excludeFarPixels = true;
 		[Tooltip("Distance fog is based on radial distance from camera when checked")]
 		public bool  useRadialDistance = false;
-		[Tooltip("Apply height-based fog?")]
+		[Tooltip("Apply _height-based fog?")]
 		public bool  heightFog = true;
 		[Tooltip("Fog top Y coordinate")]
         public float height = 1.0f;
@@ -89,11 +89,11 @@ namespace UnityStandardAssets.ImageEffects
 
             int pass = 0;
             if (distanceFog && heightFog)
-                pass = 0; // distance + height
+                pass = 0; // distance + _height
             else if (distanceFog)
                 pass = 1; // distance only
             else
-                pass = 2; // height only
+                pass = 2; // _height only
             Graphics.Blit(source, destination, fogMaterial, pass);
         }
     }

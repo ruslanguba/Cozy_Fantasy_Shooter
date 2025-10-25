@@ -21,12 +21,14 @@ public class ShootingGallery : MonoBehaviour
 
     private void OnEnable()
     {
-        _activator.OnActivate += Act;
+        _activator.OnActivate += Activate;
+        _activator.OnDeactivate += Diactivate;
     }
 
     private void OnDisable()
     {
-        _activator.OnActivate -= Act;
+        _activator.OnActivate -= Activate;
+        _activator.OnDeactivate -= Diactivate;
         ClearOldTargets();
     }
 
@@ -54,9 +56,9 @@ public class ShootingGallery : MonoBehaviour
         }
     }
 
-    public void Act()
+    public void Activate()
     {
-        _isActive = !_isActive;
+        _isActive = true;
         SpawnTargets();
         if (_isActive)
             RandomizeDirections(); // при активации новое направление
@@ -75,11 +77,8 @@ public class ShootingGallery : MonoBehaviour
         for (int i = 0; i < _platforms.Count; i++)
         {   
             Vector3 spownPosition = new Vector3(_platforms[i].transform.position.x, _platforms[i].transform.position.y+ 0.5f, _platforms[i].transform.position.z);
-            Transform lookTarget = _activator.transform;
-            Vector2 direction = lookTarget.position - spownPosition;
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.forward);
             Damagable newTarget = Instantiate(_targetPrefab, spownPosition, Quaternion.identity, _platforms[i]);
+            newTarget.transform.LookAt(_activator.transform);
             newTarget.OnDestroy += CountDestroy;
             _spawnedTargets.Add(newTarget);
             _spawnedTargetsCount++;
@@ -91,8 +90,10 @@ public class ShootingGallery : MonoBehaviour
         foreach (var target in _spawnedTargets)
         {
             if (target != null)
+            {
                 target.OnDestroy -= CountDestroy;
-            Destroy(target.gameObject);
+                Destroy(target.gameObject);
+            }
         }
 
         _spawnedTargets.Clear();
@@ -104,13 +105,13 @@ public class ShootingGallery : MonoBehaviour
         _destroyedTargetsCount++;
         if (_destroyedTargetsCount >= _spawnedTargetsCount) 
         {
-            Compleat();
+            Diactivate();
         }
     }
 
-    private void Compleat()
+    private void Diactivate()
     {
-        Debug.Log("OK");
+        _isActive = false;
         ClearOldTargets();
     }
 }

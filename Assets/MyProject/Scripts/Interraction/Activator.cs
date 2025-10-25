@@ -4,13 +4,17 @@ using UnityEngine;
 public class Activator : InterractableBase
 {
     public event Action OnActivate;
+    public event Action OnDeactivate;
     [SerializeField] private Material _activeMaterial;
     [SerializeField] private Material _inactiveMaterial;
     [SerializeField] private MeshRenderer _buttonRender;
     private bool _active;
     public override void Interract(Inventory inventory)
     {
-        Activate();
+        if (_active)
+            Diactivate();
+        else
+            Activate();
     }
 
     private void Activate()
@@ -28,5 +32,6 @@ public class Activator : InterractableBase
     {
         _active = false;
         _buttonRender.material = _inactiveMaterial;
+        OnDeactivate?.Invoke();
     }
 }

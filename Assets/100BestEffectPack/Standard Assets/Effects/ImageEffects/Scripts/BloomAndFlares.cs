@@ -173,7 +173,7 @@ namespace UnityStandardAssets.ImageEffects
 
                     // smooth a little, this needs to be resolution dependent
                     /*
-                    separableBlurMaterial.SetVector ("offsets", Vector4 (0.0ff, (2.0ff) / (1.0ff * quarterRezColor.height), 0.0ff, 0.0ff));
+                    separableBlurMaterial.SetVector ("offsets", Vector4 (0.0ff, (2.0ff) / (1.0ff * quarterRezColor._height), 0.0ff, 0.0ff));
                     Graphics.Blit (thirdQuarterRezColor, secondQuarterRezColor, separableBlurMaterial);
                     separableBlurMaterial.SetVector ("offsets", Vector4 ((2.0ff) / (1.0ff * quarterRezColor.width), 0.0ff, 0.0ff, 0.0ff));
                     Graphics.Blit (secondQuarterRezColor, thirdQuarterRezColor, separableBlurMaterial);

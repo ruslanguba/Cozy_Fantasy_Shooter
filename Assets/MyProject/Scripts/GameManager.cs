@@ -63,9 +63,8 @@ public class GameManager : MonoBehaviour
         SceneLoader.ReloadCurrentScene();
     }
 
-    public void ExitToMainMenu()
+    public void Exit()
     {
-        Time.timeScale = 1f;
-        SceneLoader.LoadScene("MainMenu");
+        Application.Quit();
     }
 }
