@@ -6,7 +6,17 @@ public class GameManager : MonoBehaviour
     public bool IsPaused { get; private set; }
 
     private GameObject _pauseMenuUI;
-    private PlayerInput _input;
+
+    public void StartGameManager()
+    {
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
 
     private void Awake()
     {
@@ -33,10 +43,6 @@ public class GameManager : MonoBehaviour
     public void RegisterPauseMenu(PauseMenu menu)
     {
         _pauseMenuUI = menu.gameObject;
-    }
-    public void RegisterPlayerInput(PlayerInput input)
-    {
-        _input = input;
     }
 
     public void PauseGame()
@@ -65,6 +71,6 @@ public class GameManager : MonoBehaviour
 
     public void Exit()
     {
-        Application.Quit();
+        
     }
 }

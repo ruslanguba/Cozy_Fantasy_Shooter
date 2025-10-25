@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class SceneLauncher : MonoBehaviour
 {
+    [SerializeField] private GameManager _gameManager;
     [SerializeField] private GameObject _playerPrefab;
     [SerializeField] private GameObject _ammoHUDPrfab;
     [SerializeField] private GameObject _crosshairHUDPrfab;
@@ -17,6 +18,7 @@ public class SceneLauncher : MonoBehaviour
 
     private void Awake()
     {
+        _gameManager.StartGameManager();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         GameObject player = Instantiate(_playerPrefab, _playerStartPosition.position, Quaternion.identity);
@@ -34,9 +36,12 @@ public class SceneLauncher : MonoBehaviour
 
     private void SetupUIDependencies()
     {
-        _pauseMenu.gameObject.SetActive(false);
+        Debug.Log(_weaponManager);
+        Debug.Log(_playerInteractorDetector);
+        Debug.Log(_pauseMenu);
         GameManager.Instance.RegisterPauseMenu(_pauseMenu);
         _ammoUI.Initialize(_weaponManager, _inventory);
         _collectPanelHendler.Initialize(_playerInteractorDetector);
+        _pauseMenu.gameObject.SetActive(false);
     }
 }
