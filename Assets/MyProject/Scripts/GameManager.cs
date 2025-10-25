@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
     public bool IsPaused { get; private set; }
 
     private GameObject _pauseMenuUI;
+    private InputReader _inputReader;
 
     public void StartGameManager()
     {
@@ -18,26 +19,26 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    private void Awake()
+    //private void Awake()
+    //{
+    //    if (Instance != null)
+    //    {
+    //        Destroy(gameObject);
+    //        return;
+    //    }
+    //    Instance = this;
+    //    DontDestroyOnLoad(gameObject);
+    //}
+
+    private void OnDisable()
     {
-        if (Instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
+        _inputReader.OnPause -= PauseGame;
     }
 
-    private void Update()
+    public void RegisterInput(InputReader inputReader)
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            if (IsPaused)
-                ResumeGame();
-            else
-                PauseGame();
-        }
+        _inputReader = inputReader;
+        _inputReader.OnPause += PauseGame;
     }
 
     public void RegisterPauseMenu(PauseMenu menu)
@@ -52,6 +53,7 @@ public class GameManager : MonoBehaviour
         _pauseMenuUI.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+        Debug.Log(IsPaused);
     }
 
     public void ResumeGame()
@@ -71,6 +73,6 @@ public class GameManager : MonoBehaviour
 
     public void Exit()
     {
-        
+        Application.Quit();
     }
 }

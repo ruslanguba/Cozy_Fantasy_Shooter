@@ -7,7 +7,7 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private Button restartButton;
     [SerializeField] private Button exitButton;
 
-    private void Awake()
+    public void Initialize()
     {
         continueButton.onClick.AddListener(() => GameManager.Instance.ResumeGame());
         restartButton.onClick.AddListener(() => GameManager.Instance.RestartGame());

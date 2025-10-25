@@ -15,6 +15,7 @@ public class SceneLauncher : MonoBehaviour
     private PlayerInteractorDetector _playerInteractorDetector;
     private AmmoUI _ammoUI;
     private UICollectPanelHendler _collectPanelHendler;
+    private InputReader _inputReader;
 
     private void Awake()
     {
@@ -27,10 +28,12 @@ public class SceneLauncher : MonoBehaviour
         GameObject menuHud = Instantiate(_menuHUDPrfab);
         _inventory = player.GetComponent<Inventory>();
         _weaponManager = player.GetComponent<WeaponManager>();
+        _inputReader = player.GetComponent<InputReader>();
         _playerInteractorDetector = player.GetComponent<PlayerInteractorDetector>();
         _ammoUI = ammoHUD.GetComponent<AmmoUI>();
         _collectPanelHendler = crosshairHUD.GetComponent<UICollectPanelHendler>();
         _pauseMenu = menuHud.GetComponent<PauseMenu>();
+        _pauseMenu.Initialize();
         SetupUIDependencies();
     }
 
@@ -40,6 +43,7 @@ public class SceneLauncher : MonoBehaviour
         Debug.Log(_playerInteractorDetector);
         Debug.Log(_pauseMenu);
         GameManager.Instance.RegisterPauseMenu(_pauseMenu);
+        GameManager.Instance.RegisterInput(_inputReader);
         _ammoUI.Initialize(_weaponManager, _inventory);
         _collectPanelHendler.Initialize(_playerInteractorDetector);
         _pauseMenu.gameObject.SetActive(false);
