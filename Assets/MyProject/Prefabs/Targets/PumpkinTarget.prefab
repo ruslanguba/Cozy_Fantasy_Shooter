@@ -29,14 +29,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4248659965177535712}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: -1.0630255, y: 0, z: -14.143622}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5766222238020072555}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!33 &5902537188031505165
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -128,7 +128,10 @@ MonoBehaviour:
   _hitPoints: 20
   _destroyOnDeath: 1
   _destroySound: {fileID: 8300000, guid: 765b982de63ec91439a89a90b22866b6, type: 3}
-  itemPrefab: {fileID: 192700, guid: 9675245c4464bf74ebc4eac2ed9a24e7, type: 3}
+  _itemPrefab:
+  - {fileID: 5648348537050827906, guid: cf541cd435666bd4e8e9b4b9700588ed, type: 3}
+  - {fileID: 351926848630187423, guid: 1c6930b9de041d848b12ab5784da2f0d, type: 3}
+  - {fileID: 1644614335195557913, guid: 4f9d78c79ef31fb429773dd8bf6423ca, type: 3}
   _effect: {fileID: 7733089716388046982}
 --- !u!114 &1036914577677782487
 MonoBehaviour:
@@ -196,6 +199,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ed12d81233d8614491b6197a782e809, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _destroySound: {fileID: 0}
+  _source: {fileID: 0}
 --- !u!82 &2437328411222843817
 AudioSource:
   m_ObjectHideFlags: 0

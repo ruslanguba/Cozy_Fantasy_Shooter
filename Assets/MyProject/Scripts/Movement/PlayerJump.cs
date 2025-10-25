@@ -15,20 +15,12 @@ public class PlayerJump
         _inputReader = inputReader;
     }
 
-    public void HandleJump()
+    public void Jump()
     {
         if (_controller.isGrounded)
         {
-            bool jumpPressed = false;
-            if (_inputReader != null)
-            {
-                jumpPressed |= _inputReader.GetJump();
-            }
-
-            if (jumpPressed)
-            {
-                _gravity.SetYVelocity(Mathf.Sqrt(_settings.jumpHeight * -2f * _settings.gravity));
-            }
+            _gravity.SetYVelocity(Mathf.Sqrt(_settings.jumpHeight * -2f * _settings.gravity));
         }
+
     }
 }

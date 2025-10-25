@@ -19,7 +19,7 @@ MonoBehaviour:
   fireRate: 5
   reloadTime: 1.5
   damage: 20
-  range: 10
+  range: 50
   isContinuous: 0
   canAim: 1
   normalFOV: 60

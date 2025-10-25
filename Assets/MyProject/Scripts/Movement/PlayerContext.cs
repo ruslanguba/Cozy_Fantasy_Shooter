@@ -27,12 +27,19 @@ public class PlayerContext : MonoBehaviour
             _aimManager.IsAiming += OnSpeedChanged;
     }
 
+    private void OnEnable()
+    {
+        _inputReader.OnJump += _jump.Jump;
+    }
+    private void OnDisable()
+    {
+        _inputReader.OnJump += _jump.Jump;
+    }
     private void Update()
     {
         _look.UpdateLook();
         _movement.UpdateMovement();
         _gravity.UpdateGravity();
-        _jump.HandleJump();
         _movement.ApplyMovement(_gravity.VerticalVelocity);
     }
 

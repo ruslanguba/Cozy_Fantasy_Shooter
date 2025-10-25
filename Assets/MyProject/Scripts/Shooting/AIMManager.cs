@@ -16,21 +16,19 @@ public class AIMManager : MonoBehaviour
         if(_weaponManager == null)
             _weaponManager = GetComponent<WeaponManager>();
         _currentWeapon = _weaponManager.CurrentWeapon;
-        //_weaponManager.WeaponChanged += OnWeaponChange;
+        _weaponManager.OnWeaponChanged += OnWeaponChange;
     }
 
-    //private void OnDisable()
-    //{
-    //    _weaponManager.WeaponChanged -= OnWeaponChange;
-    //}
+    private void OnDisable()
+    {
+        _weaponManager.OnWeaponChanged -= OnWeaponChange;
+    }
 
     private void Update()
     {
         if (_currentWeapon == null) return;
 
         bool aimHeld = inputReader.IsAimingHeld();
-
-        //_currentWeapon.SetAiming(aimHeld);
         UpdateCameraAim(aimHeld);
         if (aimHeld != _lastAimState)
         {

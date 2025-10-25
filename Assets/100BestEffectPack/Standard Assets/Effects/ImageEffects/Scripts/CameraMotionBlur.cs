@@ -273,7 +273,7 @@ namespace UnityStandardAssets.ImageEffects
 
                 // patch up velocity buffer:
 
-                // exclude certain layers (e.g. skinned objects as we cant really support that atm)
+                // exclude certain layers (e.g. skinned _objects as we cant really support that atm)
 
                 Camera cam = null;
                 if (excludeLayers.value != 0)// || dynamicLayers.value)

@@ -26,18 +26,14 @@ public class InteractionHandler : MonoBehaviour
         }
         detector.InteractableDetected += SetInteractable;
         detector.InteractableLost += ResetInteractable;
+        inputReader.OnInteract += Interact;
     }
 
     private void OnDisable()
     {
         detector.InteractableDetected -= SetInteractable;
         detector.InteractableLost -= ResetInteractable;
-    }
-
-    private void Update()
-    {
-        if (inputReader.GetInterract())
-            Interact();
+        inputReader.OnInteract -= Interact;
     }
 
     private void Interact()

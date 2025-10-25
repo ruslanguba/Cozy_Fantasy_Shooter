@@ -8,6 +8,7 @@ public class WeaponManager : MonoBehaviour
     public event Action<BaseWeapon> OnWeaponChanged;
 
     [SerializeField] private Transform weaponPivot;
+
     private Camera _camera;
     private Inventory _inventory;
 
@@ -55,6 +56,18 @@ public class WeaponManager : MonoBehaviour
             SwitchWeapon(0);
     }
 
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            SwitchWeapon(0);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            SwitchWeapon(1); 
+        }
+
+    }
     public void SwitchWeapon(int newIndex)
     {
         if (newIndex < 0 || newIndex >= _weapons.Count)

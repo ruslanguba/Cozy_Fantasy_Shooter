@@ -230,7 +230,8 @@ MonoBehaviour:
   _reloadAction: {fileID: -140423579040724872, guid: c80b885a21245a7498de3007050705ee, type: 3}
   _throwAction: {fileID: 2036044140802393820, guid: c80b885a21245a7498de3007050705ee, type: 3}
   _interractAction: {fileID: 3315331455547496477, guid: c80b885a21245a7498de3007050705ee, type: 3}
-  _scroll: {fileID: -3965661978932412175, guid: c80b885a21245a7498de3007050705ee, type: 3}
+  _scrollAction: {fileID: -3965661978932412175, guid: c80b885a21245a7498de3007050705ee, type: 3}
+  _pauseAction: {fileID: -2221797779242361203, guid: c80b885a21245a7498de3007050705ee, type: 3}
 --- !u!114 &4736158288940447887
 MonoBehaviour:
   m_ObjectHideFlags: 0

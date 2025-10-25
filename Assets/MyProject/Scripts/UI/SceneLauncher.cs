@@ -14,7 +14,6 @@ public class SceneLauncher : MonoBehaviour
     private PlayerInteractorDetector _playerInteractorDetector;
     private AmmoUI _ammoUI;
     private UICollectPanelHendler _collectPanelHendler;
-    private PlayerInput _input;
 
     private void Awake()
     {
@@ -30,7 +29,6 @@ public class SceneLauncher : MonoBehaviour
         _ammoUI = ammoHUD.GetComponent<AmmoUI>();
         _collectPanelHendler = crosshairHUD.GetComponent<UICollectPanelHendler>();
         _pauseMenu = menuHud.GetComponent<PauseMenu>();
-        _input = player.GetComponent<PlayerInput>();
         SetupUIDependencies();
     }
 

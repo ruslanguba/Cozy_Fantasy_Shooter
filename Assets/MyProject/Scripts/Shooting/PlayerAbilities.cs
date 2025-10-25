@@ -10,9 +10,12 @@ public class PlayerAbilities : MonoBehaviour
         _inputReader = GetComponent<InputReader>();
         _launchHandler = GetComponent<LaunchHandler>();
     }
-    private void Update()
+    private void OnEnable()
     {
-        if (_inputReader.GetThrow())
-            _launchHandler.Throw();
+        _inputReader.OnThrow += _launchHandler.Throw;
+    }
+    private void OnDisable()
+    {
+        _inputReader.OnThrow -= _launchHandler.Throw;
     }
 }

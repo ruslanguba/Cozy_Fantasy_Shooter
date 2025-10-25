@@ -10,27 +10,54 @@ public class ShootingController : MonoBehaviour
         weaponManager = GetComponent<WeaponManager>();
         inputReader = GetComponent<InputReader>();
     }
+
+    private void OnEnable()
+    {
+        inputReader.OnFire += HandleSingleShotFire;
+        inputReader.OnReload += HandleReload;
+        inputReader.OnScroll += HandleWeaponSwitch;
+    }
+
+    private void OnDisable()
+    {
+        inputReader.OnFire -= HandleSingleShotFire;
+        inputReader.OnReload -= HandleReload;
+        inputReader.OnScroll -= HandleWeaponSwitch;
+    }
+
     private void Update()
     {
         if (weaponManager.CurrentWeapon == null) return;
 
-        bool isHeld = inputReader.IsFiringHeld();
-        bool justPressed = inputReader.GetFire();
-
-        weaponManager.CurrentWeapon.UpdateWeapon(isHeld, justPressed);
-        weaponManager.CurrentWeapon.HandleReloadTimer();
-        if (inputReader.GetReload())
-            weaponManager.CurrentWeapon.Reload();
-
-        // Переключение оружия
-        //float scroll = Input.mouseScrollDelta.y;
-        float scroll = inputReader.GetScroll();
-        if (Mathf.Abs(scroll) > 0.1f)
+        // ContinuousWeapon проверяет удержание кнопки каждый кадр
+        if (weaponManager.CurrentWeapon is ContinuousWeapon continuous)
         {
-            if (scroll > 0)
-                weaponManager.NextWeapon();
-            else
-                weaponManager.PrevWeapon();
+            bool isHeld = inputReader.IsFiringHeld();
+            continuous.UpdateWeapon(isHeld, isHeld); // просто держим флаг
         }
+        weaponManager.CurrentWeapon.HandleReloadTimer();
+    }
+
+    private void HandleSingleShotFire()
+    {
+        if (weaponManager.CurrentWeapon is SingleShotWeapon single)
+        {
+            single.UpdateWeapon(true, true); // одноразовый выстрел
+            single.HandleReloadTimer();
+        }
+    }
+
+    private void HandleReload()
+    {
+        weaponManager.CurrentWeapon?.Reload();
+    }
+
+    private void HandleWeaponSwitch(float scroll)
+    {
+        Debug.Log(scroll);
+        if (weaponManager.CurrentWeapon == null) return;
+
+        if (scroll > 0) weaponManager.NextWeapon();
+        else if (scroll < 0) weaponManager.PrevWeapon();
     }
 }

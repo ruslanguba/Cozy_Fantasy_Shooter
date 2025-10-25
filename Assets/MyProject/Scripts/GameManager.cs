@@ -46,7 +46,6 @@ public class GameManager : MonoBehaviour
         _pauseMenuUI.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        _input.Disable();
     }
 
     public void ResumeGame()
@@ -56,7 +55,6 @@ public class GameManager : MonoBehaviour
         _pauseMenuUI.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        _input.Enable();
     }
 
     public void RestartGame()
