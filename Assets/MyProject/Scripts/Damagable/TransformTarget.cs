@@ -2,20 +2,21 @@ using UnityEngine;
 
 public class TransformTarget : Damagable
 {
-    [SerializeField] private GameObject itemPrefab;
+    [SerializeField] private GameObject _newObjectPrefab;
     [SerializeField] private VFXEffectController _effect;
-    private void Start()
-    {
-        _effect = GetComponentInChildren<VFXEffectController>();
-    }
+    [SerializeField] private Transform _destroyEffectPivot;
+
     protected override void Die()
     {
-        _effect.gameObject.transform.SetParent(null);
-        _effect.PlayEffect();
-
-        if (itemPrefab != null)
+        if (_newObjectPrefab != null)
         {
-            Instantiate(itemPrefab, transform.position, Quaternion.identity);
+            Instantiate(_newObjectPrefab, transform.position, Quaternion.identity);
+        }
+        if (_effect != null)
+        {
+            VFXEffectController effect = Instantiate(_effect, transform.position, Quaternion.identity);
+            effect.SetEffect(_destroySound);
+            effect.PlayEffect();
         }
 
         base.Die();

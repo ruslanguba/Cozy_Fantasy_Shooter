@@ -10,4 +10,7 @@ public class ThrowableSettings : ScriptableObject
     public float damage;
     public bool stickToSurfaces;
     public Sprite icon;
+
+    public VFXEffectController effect;
+    public AudioClip destroySound;
 }

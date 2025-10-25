@@ -7,11 +7,10 @@ public abstract class BaseWeapon
     public Action<int> AmmoInMagazineÒChanged;
     public Action Shoot;
     public Action StopShooting;
-    public Action<Vector3, Vector3> Hit;
+    public Action<Vector3, Vector3, bool> Hit;
     protected readonly WeaponSettings _settings;
     protected readonly Camera _camera;
     protected readonly Inventory _inventory;
-    //protected WeaponVFX _vfx;
     protected float _nextFireTime;
     protected int _currentAmmoInMagazine;
     protected bool _isReloading;
@@ -24,8 +23,8 @@ public abstract class BaseWeapon
         _camera = camera;
         _inventory = inventory;
         _currentAmmoInMagazine = settings.magazineSize;
-        //_vfx = new WeaponVFX(settings.muzzleFlashPrefab, settings.impactEffectPrefab, settings.muzzlePivot, camera);
     }
+
     protected bool TryShoot()
     {
         if (_isReloading) return false;
@@ -38,7 +37,6 @@ public abstract class BaseWeapon
         _currentAmmoInMagazine--;
         AmmoInMagazineÒChanged?.Invoke(_currentAmmoInMagazine);
         Shoot?.Invoke();
-        //_vfx.PlayMuzzleFlash(_settings.muzzlePivot);
         FireRay();
         return true;
     }
@@ -56,7 +54,6 @@ public abstract class BaseWeapon
 
         _isReloading = true;
         _reloadTimer = _settings.reloadTime;
-        Debug.Log($"Reloading {_settings.weaponName}...");
     }
 
     public void HandleReloadTimer()
@@ -69,12 +66,11 @@ public abstract class BaseWeapon
                 _isReloading = false;
                 _currentAmmoInMagazine = _settings.magazineSize;
                 AmmoInMagazineÒChanged?.Invoke(_currentAmmoInMagazine);
-                Debug.Log($"{_settings.weaponName} reloaded!");
             }
         }
     }
     public abstract void UpdateWeapon(bool isHeld, bool justPressed);
-    public virtual void SetAiming(bool isAiming) { } // ‚ ·Û‰Û˘ÂÏ ‰Îˇ ‰Ó·‡‚ÎÂÌËˇ ÓÚ‰‡˜Ë
+
     protected void FireRay()
     {
         Ray ray = new Ray(_camera.transform.position, _camera.transform.forward);
@@ -83,8 +79,11 @@ public abstract class BaseWeapon
         {
             if (hit.collider.TryGetComponent(out IDamageable target))
                 target.TakeDamage(_settings.damage);
-            Hit?.Invoke(hit.point, hit.normal);
-            //_vfx?.PlayImpact(hit.point, hit.normal);
+            Hit?.Invoke(hit.point, hit.normal, true);
+        }
+        else
+        {
+            Hit?.Invoke(_camera.transform.position + _camera.transform.forward * _settings.range, Vector3.zero, false);
         }
     }
 }

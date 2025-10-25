@@ -15,6 +15,7 @@ public class InputReader : MonoBehaviour
     [SerializeField] private InputActionReference _throwAction;
 
     [SerializeField] private InputActionReference _interractAction;
+    [SerializeField] private InputActionReference _scroll;
 
     private void OnEnable()
     {
@@ -26,6 +27,7 @@ public class InputReader : MonoBehaviour
         if (_reloadAction?.action != null) _reloadAction.action.Enable();
         if (_throwAction?.action != null) _throwAction.action.Enable();
         if (_interractAction?.action != null) _interractAction.action.Enable();
+        if (_scroll?.action != null) _scroll.action.Enable();
     }
 
     private void OnDisable()
@@ -38,6 +40,7 @@ public class InputReader : MonoBehaviour
         if (_reloadAction?.action != null) _reloadAction.action.Disable();
         if (_throwAction?.action != null) _throwAction.action.Disable();
         if (_interractAction?.action != null) _interractAction.action.Disable();
+        if (_scroll?.action != null) _scroll.action.Disable();
     }
     public Vector2 GetMove() => _moveAction?.action != null ? _moveAction.action.ReadValue<Vector2>() : Vector2.zero;
 
@@ -52,5 +55,12 @@ public class InputReader : MonoBehaviour
     public bool GetReload() => _reloadAction?.action != null && _reloadAction.action.triggered;
     public bool GetThrow() => _throwAction?.action != null && _throwAction.action.triggered;
     public bool GetInterract() => _interractAction?.action != null && _interractAction.action.triggered;
+    public float GetScroll()
+    {
+        if (_scroll?.action == null)
+            return 0f;
+        Vector2 scrollValue = _scroll.action.ReadValue<Vector2>();
+        return scrollValue.y;
+    }
 
 }

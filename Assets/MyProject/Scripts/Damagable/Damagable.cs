@@ -6,6 +6,7 @@ public abstract class Damagable : MonoBehaviour, IDamageable
     public event Action<float> HitReceived;
     [SerializeField] protected float _hitPoints = 100f;
     [SerializeField] protected bool _destroyOnDeath = true;
+    [SerializeField] protected AudioClip _destroySound;
 
     public virtual void TakeDamage(float damage)
     {

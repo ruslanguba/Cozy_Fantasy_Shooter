@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    public Action<string, int> OnAmmoChanged;
-    public Action<WeaponSettings> WeaponCollected;
+    public event Action<string, int> OnAmmoChanged;
+    public event Action<WeaponSettings> OnWeaponCollected;
+    public event Action<int> OnGrenadeCollected;
     private readonly Dictionary<string, int> _ammoStorage = new();
     private int _grenadeCount;
 
     public void AddWeapon(WeaponSettings settings)
     {
-        WeaponCollected?.Invoke(settings);
+        OnWeaponCollected?.Invoke(settings);
     }
 
     public void AddAmmo(string itemID, int amount)
@@ -20,8 +21,7 @@ public class Inventory : MonoBehaviour
             _ammoStorage[itemID] = 0;
 
         _ammoStorage[itemID] += amount;
-        OnAmmoChanged(itemID, _ammoStorage[itemID]);
-        Debug.Log($"Added {amount} {itemID} ammo. Now: {_ammoStorage[itemID]}");
+        OnAmmoChanged?.Invoke(itemID, _ammoStorage[itemID]);
     }
 
     public bool TryUseAmmo(string itemID, int amount)
@@ -30,7 +30,7 @@ public class Inventory : MonoBehaviour
             return false;
 
         _ammoStorage[itemID] -= amount;
-        OnAmmoChanged(itemID, _ammoStorage[itemID]);
+        OnAmmoChanged?.Invoke(itemID, _ammoStorage[itemID]);
         return true;
     }
 
@@ -42,7 +42,7 @@ public class Inventory : MonoBehaviour
     public void AddGrenades(int amount)
     {
         _grenadeCount += amount;
-        Debug.Log($"Added {amount} grenades. Now: {_grenadeCount}");
+        OnGrenadeCollected?.Invoke(_grenadeCount);
     }
 
     public bool TryUseGrenade()

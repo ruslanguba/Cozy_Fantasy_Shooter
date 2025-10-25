@@ -18,8 +18,8 @@ public class AmmoUI : MonoBehaviour
         _weaponManager = weaponManager;
         _inventory = inventory;
         _inventory.OnAmmoChanged += UpdateTotalAmmo;
-        _weaponManager.WeaponChanged += OnWeaponSwitched;
-        _inventory.WeaponCollected += OnWeaponCollected;
+        _weaponManager.OnWeaponChanged += OnWeaponSwitched;
+        _inventory.OnWeaponCollected += OnWeaponCollected;
         if (_weaponManager.CurrentWeapon != null)
             SubscribeToWeapon(_weaponManager.CurrentWeapon);
         if (_currentWeaponIcon.color.a != 0)
@@ -33,8 +33,8 @@ public class AmmoUI : MonoBehaviour
     private void OnDisable()
     {
         _inventory.OnAmmoChanged -= UpdateTotalAmmo;
-        _inventory.WeaponCollected -= OnWeaponCollected;
-        _weaponManager.WeaponChanged -= OnWeaponSwitched;
+        _inventory.OnWeaponCollected -= OnWeaponCollected;
+        _weaponManager.OnWeaponChanged -= OnWeaponSwitched;
         UnsubscribeFromWeapon(_currentWeapon);
     }
 
@@ -98,7 +98,8 @@ public class AmmoUI : MonoBehaviour
     private void OnWeaponCollected(WeaponSettings newWeapon)
     {
         if (!_isWeaponIconActive)
-        {
+        {   
+            _currentWeapon = _weaponManager.CurrentWeapon;
             _currentWeaponIcon.sprite = _currentWeapon.Settings?.icon;
             _isWeaponIconActive = true;
         }

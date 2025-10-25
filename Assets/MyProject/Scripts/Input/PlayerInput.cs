@@ -89,6 +89,24 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Reload"",
+                    ""type"": ""Button"",
+                    ""id"": ""95a7643b-baeb-421d-8ca0-f74c23170c5c"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Scroll"",
+                    ""type"": ""Value"",
+                    ""id"": ""3e0c6850-e419-4ff6-8dcc-b4a642dc99ca"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -212,6 +230,56 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""aa8abc0c-ff85-4a80-b8d5-68354d1fe675"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""19e4a652-b4cc-4085-a8d1-363b064404b7"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Scroll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Menu"",
+            ""id"": ""fed84a2b-ad06-4d5b-abe4-cc97056293c1"",
+            ""actions"": [
+                {
+                    ""name"": ""OnEsc"",
+                    ""type"": ""Button"",
+                    ""id"": ""4e4c1753-62fb-4d2a-bb5e-b1606cedb8ba"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""7d0e215b-1517-4715-806a-1ec4c71dfb4f"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OnEsc"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -227,11 +295,17 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_GP_Interact = m_GP.FindAction("Interact", throwIfNotFound: true);
         m_GP_ThrowProjectile = m_GP.FindAction("ThrowProjectile", throwIfNotFound: true);
         m_GP_Look = m_GP.FindAction("Look", throwIfNotFound: true);
+        m_GP_Reload = m_GP.FindAction("Reload", throwIfNotFound: true);
+        m_GP_Scroll = m_GP.FindAction("Scroll", throwIfNotFound: true);
+        // Menu
+        m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
+        m_Menu_OnEsc = m_Menu.FindAction("OnEsc", throwIfNotFound: true);
     }
 
     ~@PlayerInput()
     {
         UnityEngine.Debug.Assert(!m_GP.enabled, "This will cause a leak and performance issues, PlayerInput.GP.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Menu.enabled, "This will cause a leak and performance issues, PlayerInput.Menu.Disable() has not been called.");
     }
 
     public void Dispose()
@@ -300,6 +374,8 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_GP_Interact;
     private readonly InputAction m_GP_ThrowProjectile;
     private readonly InputAction m_GP_Look;
+    private readonly InputAction m_GP_Reload;
+    private readonly InputAction m_GP_Scroll;
     public struct GPActions
     {
         private @PlayerInput m_Wrapper;
@@ -311,6 +387,8 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         public InputAction @Interact => m_Wrapper.m_GP_Interact;
         public InputAction @ThrowProjectile => m_Wrapper.m_GP_ThrowProjectile;
         public InputAction @Look => m_Wrapper.m_GP_Look;
+        public InputAction @Reload => m_Wrapper.m_GP_Reload;
+        public InputAction @Scroll => m_Wrapper.m_GP_Scroll;
         public InputActionMap Get() { return m_Wrapper.m_GP; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -341,6 +419,12 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Look.started += instance.OnLook;
             @Look.performed += instance.OnLook;
             @Look.canceled += instance.OnLook;
+            @Reload.started += instance.OnReload;
+            @Reload.performed += instance.OnReload;
+            @Reload.canceled += instance.OnReload;
+            @Scroll.started += instance.OnScroll;
+            @Scroll.performed += instance.OnScroll;
+            @Scroll.canceled += instance.OnScroll;
         }
 
         private void UnregisterCallbacks(IGPActions instance)
@@ -366,6 +450,12 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Look.started -= instance.OnLook;
             @Look.performed -= instance.OnLook;
             @Look.canceled -= instance.OnLook;
+            @Reload.started -= instance.OnReload;
+            @Reload.performed -= instance.OnReload;
+            @Reload.canceled -= instance.OnReload;
+            @Scroll.started -= instance.OnScroll;
+            @Scroll.performed -= instance.OnScroll;
+            @Scroll.canceled -= instance.OnScroll;
         }
 
         public void RemoveCallbacks(IGPActions instance)
@@ -383,6 +473,52 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         }
     }
     public GPActions @GP => new GPActions(this);
+
+    // Menu
+    private readonly InputActionMap m_Menu;
+    private List<IMenuActions> m_MenuActionsCallbackInterfaces = new List<IMenuActions>();
+    private readonly InputAction m_Menu_OnEsc;
+    public struct MenuActions
+    {
+        private @PlayerInput m_Wrapper;
+        public MenuActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+        public InputAction @OnEsc => m_Wrapper.m_Menu_OnEsc;
+        public InputActionMap Get() { return m_Wrapper.m_Menu; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(MenuActions set) { return set.Get(); }
+        public void AddCallbacks(IMenuActions instance)
+        {
+            if (instance == null || m_Wrapper.m_MenuActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_MenuActionsCallbackInterfaces.Add(instance);
+            @OnEsc.started += instance.OnOnEsc;
+            @OnEsc.performed += instance.OnOnEsc;
+            @OnEsc.canceled += instance.OnOnEsc;
+        }
+
+        private void UnregisterCallbacks(IMenuActions instance)
+        {
+            @OnEsc.started -= instance.OnOnEsc;
+            @OnEsc.performed -= instance.OnOnEsc;
+            @OnEsc.canceled -= instance.OnOnEsc;
+        }
+
+        public void RemoveCallbacks(IMenuActions instance)
+        {
+            if (m_Wrapper.m_MenuActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IMenuActions instance)
+        {
+            foreach (var item in m_Wrapper.m_MenuActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_MenuActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public MenuActions @Menu => new MenuActions(this);
     public interface IGPActions
     {
         void OnMove(InputAction.CallbackContext context);
@@ -392,5 +528,11 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         void OnInteract(InputAction.CallbackContext context);
         void OnThrowProjectile(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
+        void OnReload(InputAction.CallbackContext context);
+        void OnScroll(InputAction.CallbackContext context);
+    }
+    public interface IMenuActions
+    {
+        void OnOnEsc(InputAction.CallbackContext context);
     }
 }

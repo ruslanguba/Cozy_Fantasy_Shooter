@@ -8,7 +8,6 @@ public class LaunchHandler : MonoBehaviour
 
     private ThrowableManager _throwableManager;
     private float _reloadTimer;
-    private bool _canThrow;
 
     private void Awake()
     {
@@ -29,14 +28,12 @@ public class LaunchHandler : MonoBehaviour
             _reloadTimer = current.reloadTime;
             GameObject obj = Instantiate(current.prefab, throwPoint.position, Quaternion.identity);
 
-            // Добавляем силу
             if (obj.TryGetComponent(out Rigidbody rb))
             {
                 Vector3 direction = throwPoint.transform.forward;
                 rb.AddForce(direction * throwForce + Vector3.up * upwardForce, ForceMode.Impulse);
             }
 
-            // Инициализация логики объекта (например, таймер взрыва)
             if (obj.TryGetComponent(out IThrowable throwable))
             {
                 throwable.Initialize(current);

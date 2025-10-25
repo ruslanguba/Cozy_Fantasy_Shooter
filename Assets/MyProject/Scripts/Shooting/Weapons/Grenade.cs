@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class Grenade : ThrowableBase
 {
-    [SerializeField] private GameObject _explosionVFX;
+    private VFXEffectController _effect;
+    protected AudioClip _destroySound;
     private float _damageRadius;
     private float _damage;
 
@@ -10,6 +11,8 @@ public class Grenade : ThrowableBase
     {
         _damageRadius = settings.damageRadius;
         _damage = settings.damage;
+        _effect = settings.effect;
+        _destroySound = settings.destroySound;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -19,11 +22,11 @@ public class Grenade : ThrowableBase
 
     private void Explode()
     {
-        if (_explosionVFX != null)
+        if (_effect != null)
         {
-            GameObject explosionEffect = Instantiate(_explosionVFX, transform.position, Quaternion.identity);
-            explosionEffect.GetComponent<ParticleSystem>().Play();
-            Destroy(explosionEffect, 1);
+            VFXEffectController effect = Instantiate(_effect, transform.position, Quaternion.identity);
+            effect.SetEffect(_destroySound);
+            effect.PlayEffect();
         }
 
         Collider[] hits = Physics.OverlapSphere(transform.position, _damageRadius);

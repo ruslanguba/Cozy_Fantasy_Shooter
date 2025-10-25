@@ -24,6 +24,8 @@ public class WeaponSettings : ScriptableObject
     [Header("Visual Effects")]
     public GameObject muzzleFlashPrefab;
     public GameObject impactEffectPrefab;
+    public AudioClip muzzleSound;
+    public AudioClip impactSound;
     //public Transform muzzlePivot;
 
     [Header("UI")]

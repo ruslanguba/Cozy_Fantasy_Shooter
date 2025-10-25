@@ -8,6 +8,7 @@ public class SpawnItemTarget : Damagable
     private void Start()
     {
         _effect = GetComponentInChildren<VFXEffectController>();
+        _effect.SetEffect(_destroySound);
     }
     protected override void Die()
     {
